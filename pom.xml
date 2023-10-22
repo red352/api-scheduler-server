@@ -51,6 +51,15 @@
             <optional>true</optional>
         </dependency>
 
-
     </dependencies>
+
+    <repositories>
+        <repository>
+            <id>github</id>
+            <url>https://maven.pkg.github.com/red352/spring-yunxiao-parent</url>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+        </repository>
+    </repositories>
 </project>
