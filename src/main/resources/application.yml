@@ -1,0 +1,26 @@
+server:
+  port: 8080
+spring:
+  application:
+    name: API调度系统
+  r2dbc:
+    url: r2dbc:mysql://${mysql-host}:3306/api_scheduler?useUnicode=true&characterEncoding=utf8&useSSL=false&allowPublicKeyRetrieval=true&allowMultiQueries=true
+    username: ${mysql-username}
+    password: ${mysql-password}
+  mail:
+    host: smtp.qq.com
+    username: 1829462342@qq.com
+    password: ${qqmail_key}
+    port: 587
+    properties:
+      nick: ${spring.application.name}
+      default-subject: 您有新的通知了！
+logging:
+  pattern:
+    dateformat: HH:mm:ss
+  level:
+    com.yunxiao.service: debug
+    io.asyncer.r2dbc.mysql.QUERY: debug
+    sql: debug
+    org.springframework.web.HttpLogging: debug
+
