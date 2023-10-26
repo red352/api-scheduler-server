@@ -21,9 +21,7 @@ public class AppConfig {
 
     @Bean
     TaskSchedulerManager taskSchedulerManager() {
-        ThreadPoolTaskScheduler taskScheduler = new ThreadPoolTaskScheduler();
-        taskScheduler.setPoolSize(2);
-        return new TaskSchedulerManager(taskScheduler);
+        return new TaskSchedulerManager(new ThreadPoolTaskScheduler());
     }
 
     @Bean

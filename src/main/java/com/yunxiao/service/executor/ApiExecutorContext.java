@@ -22,6 +22,7 @@ public class ApiExecutorContext implements ApiExecutor {
 
     @Override
     public void execute(ApiTrigger apiTrigger, ResponseParser<?> parser) {
+        log.debug("触发成功，{}", apiTrigger);
         if (apiTrigger.getExecType() == null || apiTrigger.getExecType().isBlank()) {
             return;
         }

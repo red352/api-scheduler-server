@@ -1,4 +1,4 @@
-package com.yunxiao.service.data.model.support.json;
+package com.yunxiao.service.data.support.json;
 
 import lombok.*;
 

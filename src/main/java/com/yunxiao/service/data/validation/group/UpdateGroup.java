@@ -1,4 +1,4 @@
-package com.yunxiao.service.data.model.support.validation.group;
+package com.yunxiao.service.data.validation.group;
 
 /**
  * @author LuoYunXiao

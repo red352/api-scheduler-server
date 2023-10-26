@@ -1,4 +1,4 @@
-package com.yunxiao.service.data.model.support.json;
+package com.yunxiao.service.data.support.json;
 
 import cn.hutool.json.JSONUtil;
 import org.springframework.lang.NonNull;

@@ -1,6 +1,6 @@
 package com.yunxiao.service.config;
 
-import com.yunxiao.service.data.model.support.ErrorCode;
+import com.yunxiao.service.data.support.ErrorCode;
 import com.yunxiao.spring.reactive.model.result.Result;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.codec.DecodingException;

@@ -1,6 +1,6 @@
-package com.yunxiao.service.data.model.support.validation;
+package com.yunxiao.service.data.validation;
 
-import com.yunxiao.service.data.model.support.validation.validator.IsInArrayValidator;
+import com.yunxiao.service.data.validation.validator.IsInArrayValidator;
 import jakarta.validation.Constraint;
 import jakarta.validation.Payload;
 

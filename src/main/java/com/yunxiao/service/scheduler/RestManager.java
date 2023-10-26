@@ -2,8 +2,8 @@ package com.yunxiao.service.scheduler;
 
 import com.yunxiao.service.data.model.Api;
 import com.yunxiao.service.data.model.ApiTrigger;
-import com.yunxiao.service.data.model.support.json.JsonConvert;
 import com.yunxiao.service.data.repository.ApiRepository;
+import com.yunxiao.service.data.support.json.JsonConvert;
 import com.yunxiao.spring.core.rest.RequestObj;
 import com.yunxiao.spring.core.rest.RestService;
 import com.yunxiao.spring.core.rest.paser.ResponseParser;
@@ -43,7 +43,6 @@ public class RestManager {
     public void doRest(ApiTrigger apiTrigger) {
         // 1.首先查询api详情
         apiRepository.findById(apiTrigger.getApiId())
-                .publishOn(Schedulers.fromExecutor(es))
                 .doOnNext(api -> {
                     // 解析成请求对象
                     Map<String, List<String>> headers = null;
@@ -78,6 +77,7 @@ public class RestManager {
 
                     // 结束
                 })
+                .subscribeOn(Schedulers.fromExecutor(es))
                 .subscribe();
     }
 

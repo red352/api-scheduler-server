@@ -2,7 +2,7 @@ package com.yunxiao.service.scheduler;
 
 import cn.hutool.json.JSON;
 import com.yunxiao.service.data.model.ApiTrigger;
-import com.yunxiao.service.data.model.support.json.JsonConvert;
+import com.yunxiao.service.data.support.json.JsonConvert;
 import com.yunxiao.service.executor.ApiExecutorContext;
 import com.yunxiao.spring.core.rest.paser.ResponseParser;
 import com.yunxiao.spring.core.rest.paser.StringResponseParser;
@@ -55,6 +55,7 @@ public class TriggerManager {
                 JSON resJson = null;
                 if (parser instanceof StringResponseParser responseParser) {
                     resJson = responseParser.getJson();
+                    log.debug("请求返回结果是,{}", resJson);
                 }
                 if (resJson == null || data == null || data.isEmpty()) {
                     cache.evictIfPresent(apiTrigger.getId());
@@ -68,6 +69,7 @@ public class TriggerManager {
                     }
                 }
                 // 满足条件，通过
+                log.debug("满足条件");
                 // 如果缓存过，退出
                 if (cache.get(apiTrigger.getId()) != null) {
                     return;

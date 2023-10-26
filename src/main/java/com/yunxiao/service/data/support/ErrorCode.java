@@ -1,4 +1,4 @@
-package com.yunxiao.service.data.model.support;
+package com.yunxiao.service.data.support;
 
 import com.yunxiao.spring.reactive.model.result.CodeAble;
 import lombok.AllArgsConstructor;
