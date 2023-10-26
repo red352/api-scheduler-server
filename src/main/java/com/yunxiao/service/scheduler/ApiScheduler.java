@@ -1,7 +1,6 @@
 package com.yunxiao.service.scheduler;
 
 import com.yunxiao.service.data.model.ApiTrigger;
-import com.yunxiao.service.executor.RestExecutor;
 import com.yunxiao.spring.core.scheduler.TaskSchedulerManager;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -20,12 +19,12 @@ import org.springframework.stereotype.Component;
 public class ApiScheduler {
 
     private final TaskSchedulerManager schedulerManager;
-    private final RestExecutor restExecutor;
+    private final RestManager restManager;
 
     public void schedule(ApiTrigger apiTrigger) {
         schedulerManager.schedule(
                 apiTrigger.getId().toString(),
-                new CronTask(() -> restExecutor.doRest(apiTrigger), apiTrigger.getCron()));
+                new CronTask(() -> restManager.doRest(apiTrigger), apiTrigger.getCron()));
     }
 
 }

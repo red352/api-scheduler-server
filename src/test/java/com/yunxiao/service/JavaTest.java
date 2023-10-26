@@ -8,7 +8,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.yunxiao.service.data.model.support.json.JsonModel;
 import org.junit.jupiter.api.Test;
 
-import java.net.URI;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutorService;
@@ -87,7 +87,9 @@ public class JavaTest {
 
     @Test
     void test5() {
-        URI uri = URI.create("https://?mid=1366330988");
+        String s = "";
+        String[] split = s.split(",");
+        System.out.println(Arrays.toString(split));
 
     }
 

@@ -1,4 +1,4 @@
-package com.yunxiao.service.executor;
+package com.yunxiao.service.scheduler;
 
 import com.yunxiao.service.data.model.Api;
 import com.yunxiao.service.data.model.ApiTrigger;
@@ -15,6 +15,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.MultiValueMapAdapter;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
+import reactor.core.scheduler.Schedulers;
 
 import java.net.URI;
 import java.util.List;
@@ -29,20 +30,21 @@ import java.util.concurrent.ExecutorService;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-public class RestExecutor {
+public class RestManager {
 
 
     private final ApiRepository apiRepository;
     private final ExecutorService es;
-    private final TriggerExecutor triggerExecutor;
+    private final TriggerManager triggerManager;
 
     private final static RestService restService = new RestService(new RestTemplate());
 
 
     public void doRest(ApiTrigger apiTrigger) {
         // 1.首先查询api详情
-        es.execute(() -> apiRepository.findById(apiTrigger.getApiId())
-                .subscribe(api -> {
+        apiRepository.findById(apiTrigger.getApiId())
+                .publishOn(Schedulers.fromExecutor(es))
+                .doOnNext(api -> {
                     // 解析成请求对象
                     Map<String, List<String>> headers = null;
                     Map<String, List<String>> params = null;
@@ -68,18 +70,18 @@ public class RestExecutor {
                             .body(api.getBody())
                             .headers(headers)
                             .build();
-                    // 2.执行嵌套任务的提交，发送rest请求
-                    es.execute(() -> {
-                        // 请求返回值暂时目前使用text类型的
-                        ResponseParser<?> parser = restContext(api, requestObj);
-                        if (parser == null) return;
-                        triggerExecutor.decide(apiTrigger, parser);
-                    });
+                    // 2.发送rest请求
+
+                    ResponseParser<?> parser = execute(api, requestObj);
+                    if (parser == null) return;
+                    triggerManager.decide(apiTrigger, parser);
+
                     // 结束
-                }));
+                })
+                .subscribe();
     }
 
-    private ResponseParser<?> restContext(Api api, RequestObj requestObj) {
+    private ResponseParser<?> execute(Api api, RequestObj requestObj) {
         return switch (api.getResponseType()) {
             case 0 -> {
                 // body为text类型

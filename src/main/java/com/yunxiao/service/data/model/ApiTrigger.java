@@ -51,7 +51,7 @@ public class ApiTrigger implements Serializable {
     private LocalDateTime lastExec;
 
     /**
-     * 触发类型（-1：任何时候不触发，0：任何时候触发，1：根据Http状态码触发，2：根据Json指定值触发）
+     * 触发类型（-1：任何时候不触发，0：任何时候触发，1：根据Http状态码触发，2：动态根据Json指定值触发）
      */
     @Column("trigger_type")
     private Integer triggerType;
@@ -66,6 +66,11 @@ public class ApiTrigger implements Serializable {
      * 状态（0：未启用，1：启用）
      */
     private Integer status;
+
+    /**
+     * 执行类型，逗号分割（0：发送邮件）
+     */
+    private String execType;
 
     /**
      * 通知邮箱

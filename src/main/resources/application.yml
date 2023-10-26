@@ -3,6 +3,10 @@ server:
 spring:
   application:
     name: API调度系统
+  cache:
+    cache-names:
+      - api
+    type: simple
   r2dbc:
     url: r2dbc:mysql://${mysql-host}:3306/api_scheduler?useUnicode=true&characterEncoding=utf8&useSSL=false&allowPublicKeyRetrieval=true&allowMultiQueries=true
     username: ${mysql-username}

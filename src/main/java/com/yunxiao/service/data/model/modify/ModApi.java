@@ -38,7 +38,7 @@ public class ModApi {
             groups = {SaveGroup.class, UpdateGroup.class})
     private String method;
 
-    @NotNull(groups = {SaveGroup.class})
+    @NotNull(groups = {SaveGroup.class, UpdateGroup.class})
     private Integer responseType;
 
     private Map<String, List<String>> params;

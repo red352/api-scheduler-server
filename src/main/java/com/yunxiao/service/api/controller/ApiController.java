@@ -86,7 +86,8 @@ public class ApiController {
                         .set("method", api.getMethod())
                         .set("params", api.getParams())
                         .set("body", api.getBody())
-                        .set("headers", api.getHeaders()),
+                        .set("headers", api.getHeaders())
+                        .set("response_type", api.getResponseType()),
                 Api.class
         ).thenReturn(Result.ok());
     }
