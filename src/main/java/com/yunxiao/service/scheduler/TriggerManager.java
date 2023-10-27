@@ -1,6 +1,7 @@
 package com.yunxiao.service.scheduler;
 
 import cn.hutool.json.JSON;
+import com.yunxiao.service.data.TriggerType;
 import com.yunxiao.service.data.model.ApiTrigger;
 import com.yunxiao.service.data.support.json.JsonConvert;
 import com.yunxiao.service.executor.ApiExecutorContext;
@@ -30,21 +31,21 @@ public class TriggerManager {
     private final Cache cache;
 
     public void decide(@NonNull ApiTrigger apiTrigger, @NonNull ResponseParser<?> parser) {
-        switch (apiTrigger.getTriggerType()) {
-            case -1 -> {
+        switch (TriggerType.valueOf(apiTrigger.getTriggerType())) {
+            case ANYTIME_NOT_TRIGGER -> {
                 // 任何时候不触发
             }
-            case 0 -> {
+            case ANYTIME_TRIGGER -> {
                 // 任何时候触发
                 apiExecutorContext.execute(apiTrigger, parser);
             }
-            case 1 -> {
+            case HTTP_STATUS_TRIGGER -> {
                 // 根据Http状态码触发
                 if (Objects.equals(apiTrigger.getExpectData(), String.valueOf(parser.getHttpStatus()))) {
                     apiExecutorContext.execute(apiTrigger, parser);
                 }
             }
-            case 2 -> {
+            case JSON_VALUE_TRIGGER -> {
                 // 根据Json指定值触发
                 Map<List<String>, String> data = null;
                 try {
@@ -77,7 +78,7 @@ public class TriggerManager {
                 cache.put(apiTrigger.getId(), "pass");
                 apiExecutorContext.execute(apiTrigger, parser);
             }
-            default -> log.error("触发类型不存在,{}", apiTrigger);
+            case null, default -> log.error("触发类型不存在,{}", apiTrigger);
         }
     }
 

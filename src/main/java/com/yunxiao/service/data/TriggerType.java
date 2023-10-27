@@ -18,4 +18,14 @@ public enum TriggerType {
     private final int type;
     private final String desc;
 
+
+    public static TriggerType valueOf(int type) {
+        for (TriggerType triggerType : values()) {
+            if (type == triggerType.getType()) {
+                return triggerType;
+            }
+        }
+        return null;
+    }
+
 }

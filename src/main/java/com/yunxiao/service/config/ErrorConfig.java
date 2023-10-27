@@ -1,7 +1,9 @@
 package com.yunxiao.service.config;
 
 import com.yunxiao.service.data.support.ErrorCode;
+import com.yunxiao.spring.reactive.model.result.BusinessException;
 import com.yunxiao.spring.reactive.model.result.Result;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.codec.DecodingException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -14,11 +16,22 @@ import reactor.core.publisher.Mono;
  */
 @Configuration
 @RestControllerAdvice
+@Slf4j
 public class ErrorConfig {
 
     @ExceptionHandler(DecodingException.class)
     public Mono<Result<Void>> decodingException(DecodingException e) {
-
+        if (log.isDebugEnabled()) {
+            log.error("请求解码失败", e);
+        }
         return Result.ofNull().codeEnum(ErrorCode.REQUEST_PARAM_ERROR).toMono();
+    }
+
+    @ExceptionHandler(BusinessException.class)
+    public Mono<Result<Void>> businessException(BusinessException e) {
+        if (log.isDebugEnabled()) {
+            log.error("业务异常", e);
+        }
+        return Result.ofNull().code(e.getCode()).msg(e.getMsg()).tips(e.getTips()).toMono();
     }
 }
