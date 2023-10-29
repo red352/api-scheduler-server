@@ -17,6 +17,10 @@ import java.util.regex.PatternSyntaxException;
  * 1：每几分钟
  * 2：每几小时
  * 3：每天什么时候
+ * <p>
+ * cron的不记录时间，为了让cron表达式更有意义
+ * <p>
+ * 当使用"*:+"/"+"intValue"，intValue必须能被(当前单位最大值+1)整除
  *
  * @author LuoYunXiao
  * @since 2023/10/26 23:40
@@ -32,22 +36,41 @@ public class CronModel {
     @NotNull
     private CronEnum type;
 
+    @NotNull
     private LocalTime time;
+
+
+    private static final String USER_TIP = "请尝试定义一个更有意义的时间,该单位值必须能被(当前单位最大值+1)整除";
 
     public String toCron() {
         return switch (type) {
-            case SEC_IN_MIN -> CronPatternBuilder.of()
-                    .set(Part.SECOND, "*/" + time.getSecond())
-                    .build();
-            case MIN_IN_HOUR -> CronPatternBuilder.of()
-                    .set(Part.SECOND, String.valueOf(time.getSecond()))
-                    .set(Part.MINUTE, "*/" + time.getMinute())
-                    .build();
-            case HOUR_IN_DAY -> CronPatternBuilder.of()
-                    .set(Part.SECOND, String.valueOf(time.getSecond()))
-                    .set(Part.MINUTE, String.valueOf(time.getMinute()))
-                    .set(Part.HOUR, "*/" + time.getHour())
-                    .build();
+            case SEC_IN_MIN -> {
+                if (60 % time.getSecond() != 0) {
+                    throw new BusinessException(ErrorCode.PARSE_CRON_ERROR, "秒数无意义，" + USER_TIP);
+                }
+                yield CronPatternBuilder.of()
+                        .set(Part.SECOND, "*/" + time.getSecond())
+                        .build();
+            }
+            case MIN_IN_HOUR -> {
+                if (60 % time.getMinute() != 0) {
+                    throw new BusinessException(ErrorCode.PARSE_CRON_ERROR, "分钟数无意义，" + USER_TIP);
+                }
+                yield CronPatternBuilder.of()
+                        .set(Part.SECOND, String.valueOf(time.getSecond()))
+                        .set(Part.MINUTE, "*/" + time.getMinute())
+                        .build();
+            }
+            case HOUR_IN_DAY -> {
+                if (24 % time.getHour() != 0) {
+                    throw new BusinessException(ErrorCode.PARSE_CRON_ERROR, "小时数无意义，" + USER_TIP);
+                }
+                yield CronPatternBuilder.of()
+                        .set(Part.SECOND, String.valueOf(time.getSecond()))
+                        .set(Part.MINUTE, String.valueOf(time.getMinute()))
+                        .set(Part.HOUR, "*/" + time.getHour())
+                        .build();
+            }
             case TIME_IN_DAY -> CronPatternBuilder.of()
                     .set(Part.SECOND, String.valueOf(time.getSecond()))
                     .set(Part.MINUTE, String.valueOf(time.getMinute()))
@@ -56,6 +79,7 @@ public class CronModel {
             case null -> throw new BusinessException(ErrorCode.SYSTEM_ERROR);
         };
     }
+
 
     @Nullable
     public static CronModel of(String cron) {
@@ -86,4 +110,5 @@ public class CronModel {
         }
         return new CronModel(CronEnum.TIME_IN_DAY, LocalTime.of(Integer.parseInt(parts[2]), Integer.parseInt(parts[1]), Integer.parseInt(parts[0])));
     }
+
 }

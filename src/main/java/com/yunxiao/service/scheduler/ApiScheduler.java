@@ -1,5 +1,6 @@
 package com.yunxiao.service.scheduler;
 
+import com.yunxiao.service.data.Status;
 import com.yunxiao.service.data.model.ApiTrigger;
 import com.yunxiao.spring.core.scheduler.TaskSchedulerManager;
 import lombok.Getter;
@@ -22,9 +23,22 @@ public class ApiScheduler {
     private final RestManager restManager;
 
     public void schedule(ApiTrigger apiTrigger) {
+        if (Status.OFF.getStatus() == apiTrigger.getStatus()) {
+            log.debug("触发器状态置为OFF,结束添加到调度器");
+            cancel(apiTrigger.getId());
+            return;
+        }
+
         schedulerManager.schedule(
                 apiTrigger.getId().toString(),
                 new CronTask(() -> restManager.doRest(apiTrigger), apiTrigger.getCron()));
+        log.debug("添加触发器,{}", apiTrigger);
+    }
+
+
+    public void cancel(int triggerId) {
+        log.debug("取消触发器,id:{}", triggerId);
+        schedulerManager.cancel(String.valueOf(triggerId));
     }
 
 }

@@ -3,9 +3,9 @@ package com.yunxiao.service.api.controller;
 import com.yunxiao.service.data.model.Api;
 import com.yunxiao.service.data.model.modify.ModApi;
 import com.yunxiao.service.data.model.query.QueryApi;
+import com.yunxiao.service.data.repository.ApiRepository;
 import com.yunxiao.service.data.validation.group.SaveGroup;
 import com.yunxiao.service.data.validation.group.UpdateGroup;
-import com.yunxiao.service.data.repository.ApiRepository;
 import com.yunxiao.spring.reactive.model.result.RequestPage;
 import com.yunxiao.spring.reactive.model.result.Result;
 import io.swagger.v3.oas.annotations.Operation;
@@ -17,10 +17,7 @@ import org.springframework.data.relational.core.query.Criteria;
 import org.springframework.data.relational.core.query.Query;
 import org.springframework.data.relational.core.query.Update;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Mono;
 
 import java.util.ArrayList;
@@ -33,6 +30,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/v1/api")
 @RequiredArgsConstructor
+@CrossOrigin
 public class ApiController {
 
     private final ApiRepository apiRepository;
@@ -79,15 +77,22 @@ public class ApiController {
     @Operation(summary = "更新api")
     Mono<Result<Void>> updateApi(@RequestBody @Validated(UpdateGroup.class) ModApi modApi) {
         Api api = modApi.convert();
+        Update update = Update.update("name", api.getName())
+                .set("url", api.getUrl())
+                .set("method", api.getMethod())
+                .set("response_type", api.getResponseType());
+        if (api.getParams() != null) {
+            update.set("params", api.getParams());
+        }
+        if (api.getBody() != null) {
+            update.set("body", api.getBody());
+        }
+        if (api.getHeaders() != null) {
+            update.set("headers", api.getHeaders());
+        }
         return r2dbcEntityTemplate.update(
                 Query.query(Criteria.where("id").is(api.getId())),
-                Update.update("name", api.getName())
-                        .set("url", api.getUrl())
-                        .set("method", api.getMethod())
-                        .set("params", api.getParams())
-                        .set("body", api.getBody())
-                        .set("headers", api.getHeaders())
-                        .set("response_type", api.getResponseType()),
+                update,
                 Api.class
         ).thenReturn(Result.ok());
     }

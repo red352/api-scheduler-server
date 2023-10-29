@@ -21,4 +21,7 @@ public interface ApiTriggerRepository extends R2dbcRepository<ApiTrigger, Intege
     @Query("UPDATE api_trigger SET last_exec = :lastExec WHERE id = :id")
     Mono<Void> updateLastExecById(Integer id, LocalDateTime lastExec);
 
+    @Modifying
+    @Query("UPDATE api_trigger SET status = :status WHERE id = :id")
+    Mono<Void> updateStatus(int id, int status);
 }

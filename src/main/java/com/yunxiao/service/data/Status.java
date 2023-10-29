@@ -11,8 +11,8 @@ import lombok.Getter;
 @AllArgsConstructor
 public enum Status {
 
-    ON(1, "开启"),
-    OFF(0, "关闭");
+    OFF(0, "关闭"),
+    ON(1, "开启"),;
 
     private final int status;
     private final String desc;
