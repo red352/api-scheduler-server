@@ -59,7 +59,9 @@ public class ApiTriggerController {
     @Operation(summary = "添加触发器")
     @PostMapping("add")
     Mono<Result<ApiTrigger>> saveApiTrigger(@RequestBody @Validated ApiTriggerVo vo) {
-        return triggerRepository.save(vo.toEntity()).map(Result::ok);
+        return triggerRepository.save(vo.toEntity())
+                .doOnNext(scheduler::schedule)
+                .map(Result::ok);
     }
 
     @Operation(summary = "更改触发器状态")
@@ -99,6 +101,8 @@ public class ApiTriggerController {
                         Query.query(Criteria.where("id").is(vo.getId())),
                         Update.from(updateMap),
                         ApiTrigger.class)
-                .map(count -> Result.ok());
+                .then(triggerRepository.findById(vo.getId()))
+                .doOnNext(scheduler::schedule)
+                .thenReturn(Result.ok());
     }
 }
