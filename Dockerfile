@@ -1,5 +1,5 @@
 # 阶段一：构建阶段
-FROM maven:3.9.2 AS builder
+FROM maven:latest AS builder
 
 # 设置工作目录
 WORKDIR /app
@@ -17,7 +17,7 @@ COPY src ./src
 RUN mvn package -DskipTests
 
 # 阶段二：运行阶段
-FROM openjdk:21
+FROM openjdk:21-slim-buster
 
 # 设置工作目录
 WORKDIR /app
