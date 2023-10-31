@@ -4,6 +4,9 @@ FROM maven:3.9.2 AS builder
 # 设置工作目录
 WORKDIR /app
 
+# 将settings.xml文件复制到容器中
+COPY settings.xml /root/.m2/
+
 # 复制项目的 pom.xml 文件
 COPY pom.xml .
 
