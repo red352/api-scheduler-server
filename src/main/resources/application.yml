@@ -12,7 +12,7 @@ spring:
     username: ${mysql_username}
     password: ${mysql_password}
     pool:
-      validation-depth: remote # 这里不知道为啥，使用local模式检验连接总是reset
+      validation-depth: remote
   mail:
     host: smtp.qq.com
     username: 1829462342@qq.com

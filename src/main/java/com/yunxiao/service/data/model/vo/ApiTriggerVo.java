@@ -5,6 +5,7 @@ import com.yunxiao.service.data.model.ApiTrigger;
 import com.yunxiao.service.data.support.cron.CronModel;
 import com.yunxiao.service.data.support.json.JsonConvert;
 import com.yunxiao.service.data.support.json.JsonModel;
+import jakarta.validation.Valid;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -22,6 +23,7 @@ import java.util.Map;
 @ToString
 public class ApiTriggerVo extends ApiTrigger {
 
+    @Valid
     private CronModel cronModel;
 
     private Map<List<String>, String> expectDataCopy;

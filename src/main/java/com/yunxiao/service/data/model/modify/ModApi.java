@@ -1,7 +1,5 @@
 package com.yunxiao.service.data.model.modify;
 
-import cn.hutool.core.lang.TypeReference;
-import cn.hutool.json.JSONUtil;
 import com.yunxiao.service.data.model.Api;
 import com.yunxiao.service.data.support.json.JsonConvert;
 import com.yunxiao.service.data.support.json.JsonModel;
@@ -32,37 +30,32 @@ public class ModApi {
     @Null(groups = SaveGroup.class)
     private Integer id;
 
-    @NotBlank(groups = {SaveGroup.class, UpdateGroup.class})
+    @NotBlank(groups = {SaveGroup.class})
     private String name;
 
-    @NotBlank(groups = {SaveGroup.class, UpdateGroup.class})
+    @NotBlank(groups = {SaveGroup.class})
     private String url;
 
     @IsInArrayValidation(
             value = {"GET", "POST", "PUT", "DELETE"},
             message = "不支持的请求方法",
-            groups = {SaveGroup.class, UpdateGroup.class})
+            groups = {SaveGroup.class})
     private String method;
 
-    @NotNull(groups = {SaveGroup.class, UpdateGroup.class})
+    @NotNull(groups = {SaveGroup.class})
     private Integer responseType;
 
-    private String params;
+    private Map<String, List<String>> params;
 
     private String body;
 
-    private String headers;
+    private Map<String, List<String>> headers;
 
-
-    private static final TypeReference<Map<String, List<String>>> typeReference = new TypeReference<>() {
-    };
 
     public Api convert() {
-        var paramsMap = JSONUtil.toBean(params, typeReference, false);
-        var headersMap = JSONUtil.toBean(headers, typeReference, false);
 
-        String paramsStr = paramsMap == null ? null : JsonConvert.toJsonStr(JsonModel.builder().params(paramsMap).build());
-        String headersStr = headersMap == null ? null : JsonConvert.toJsonStr(JsonModel.builder().headers(headersMap).build());
+        String paramsStr = params == null ? null : JsonConvert.toJsonStr(JsonModel.builder().params(params).build());
+        String headersStr = headers == null ? null : JsonConvert.toJsonStr(JsonModel.builder().headers(headers).build());
         return Api.builder()
                 .id(id)
                 .name(name)

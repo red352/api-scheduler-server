@@ -35,10 +35,8 @@ public class TriggerManager {
             case ANYTIME_NOT_TRIGGER -> {
                 // 任何时候不触发
             }
-            case ANYTIME_TRIGGER -> {
-                // 任何时候触发
-                apiExecutorContext.execute(apiTrigger, parser);
-            }
+            case ANYTIME_TRIGGER -> // 任何时候触发
+                    apiExecutorContext.execute(apiTrigger, parser);
             case HTTP_STATUS_TRIGGER -> {
                 // 根据Http状态码触发
                 if (Objects.equals(apiTrigger.getExpectData(), String.valueOf(parser.getHttpStatus()))) {
@@ -56,7 +54,6 @@ public class TriggerManager {
                 JSON resJson = null;
                 if (parser instanceof StringResponseParser responseParser) {
                     resJson = responseParser.getJson();
-                    log.debug("请求返回结果是,{}", resJson);
                 }
                 if (resJson == null || data == null || data.isEmpty()) {
                     cache.evictIfPresent(apiTrigger.getId());

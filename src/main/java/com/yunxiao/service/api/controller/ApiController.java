@@ -16,11 +16,13 @@ import org.springframework.data.r2dbc.core.R2dbcEntityTemplate;
 import org.springframework.data.relational.core.query.Criteria;
 import org.springframework.data.relational.core.query.Query;
 import org.springframework.data.relational.core.query.Update;
+import org.springframework.data.relational.core.sql.SqlIdentifier;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Mono;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -67,7 +69,7 @@ public class ApiController {
     }
 
     @PostMapping("/delete")
-    @Operation(summary = "删除api", description = "")
+    @Operation(summary = "删除api")
     Mono<Result<Void>> deleteApi(@RequestBody @Validated(UpdateGroup.class) ModApi modApi) {
         return apiRepository.deleteById(modApi.getId()).thenReturn(Result.ok());
     }
@@ -77,22 +79,34 @@ public class ApiController {
     @Operation(summary = "更新api")
     Mono<Result<Void>> updateApi(@RequestBody @Validated(UpdateGroup.class) ModApi modApi) {
         Api api = modApi.convert();
-        Update update = Update.update("name", api.getName())
-                .set("url", api.getUrl())
-                .set("method", api.getMethod())
-                .set("response_type", api.getResponseType());
+        HashMap<SqlIdentifier, Object> map = new HashMap<>();
+        if (api.getName() != null) {
+            map.put(SqlIdentifier.quoted("name"), api.getName());
+        }
+        if (api.getUrl() != null) {
+            map.put(SqlIdentifier.quoted("url"), api.getUrl());
+        }
+        if (api.getMethod() != null) {
+            map.put(SqlIdentifier.quoted("method"), api.getMethod());
+        }
+        if (api.getResponseType() != null) {
+            map.put(SqlIdentifier.quoted("response_type"), api.getResponseType());
+        }
         if (api.getParams() != null) {
-            update.set("params", api.getParams());
+            map.put(SqlIdentifier.quoted("params"), api.getParams());
         }
         if (api.getBody() != null) {
-            update.set("body", api.getBody());
+            map.put(SqlIdentifier.quoted("body"), api.getBody());
         }
         if (api.getHeaders() != null) {
-            update.set("headers", api.getHeaders());
+            map.put(SqlIdentifier.quoted("headers"), api.getHeaders());
+        }
+        if (map.isEmpty()) {
+            return Result.ofNull().toMono();
         }
         return r2dbcEntityTemplate.update(
                 Query.query(Criteria.where("id").is(api.getId())),
-                update,
+                Update.from(map),
                 Api.class
         ).thenReturn(Result.ok());
     }
