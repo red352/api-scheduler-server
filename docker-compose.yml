@@ -4,8 +4,22 @@ services:
     image: maven:3.9.5
     working_dir: /app
     volumes:
-      - /etc/config/maven-repo:/root/.m2
+      - $HOME/.m2:/root/.m2
       - ./:/app
     command:
       - mvn
       - package
+  java:
+    depends_on:
+      - maven
+    build:
+      dockerfile: Dockerfile
+    # 这里参数需配置系统环境变量
+    # 或者直接在这里配置
+    environment:
+      - mysql_host=192.168.0.201
+      - mysql_username=root
+      - mysql_password=123456
+      - qqmail_key=key
+    ports:
+      - "8080:8080"
