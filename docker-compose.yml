@@ -4,7 +4,7 @@ services:
     image: maven:3.9.5
     working_dir: /app
     volumes:
-      - $HOME/.m2:/root/.m2
+      - $HOME/.m2:/root/.m2 # 这里配置maven配置目录，maven设置github的认证token
       - ./:/app
     command:
       - mvn
