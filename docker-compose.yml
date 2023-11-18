@@ -1,0 +1,11 @@
+version: "3"
+services:
+  maven:
+    image: maven:3.9.5
+    working_dir: /app
+    volumes:
+      - /etc/config/maven-repo:/root/.m2
+      - ./:/app
+    command:
+      - mvn
+      - package
