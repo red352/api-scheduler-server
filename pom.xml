@@ -23,15 +23,9 @@
             <groupId>com.yunxiao.spring</groupId>
             <artifactId>yunxiao-reactive</artifactId>
         </dependency>
-
-        <!-- 数据库 -->
         <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-data-r2dbc</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>io.asyncer</groupId>
-            <artifactId>r2dbc-mysql</artifactId>
+            <groupId>com.yunxiao.spring</groupId>
+            <artifactId>yunxiao-r2dbc</artifactId>
         </dependency>
         <!-- mail -->
         <dependency>

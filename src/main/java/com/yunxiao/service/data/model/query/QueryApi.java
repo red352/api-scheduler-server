@@ -1,6 +1,6 @@
 package com.yunxiao.service.data.model.query;
 
-import com.yunxiao.spring.reactive.model.result.RequestPage;
+import com.yunxiao.spring.core.protocol.RequestPage;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.Valid;
 

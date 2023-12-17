@@ -1,6 +1,6 @@
 package com.yunxiao.service.data.support;
 
-import com.yunxiao.spring.reactive.model.result.CodeAble;
+import com.yunxiao.spring.core.protocol.CodeAble;
 import lombok.AllArgsConstructor;
 
 /**

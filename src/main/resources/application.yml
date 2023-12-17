@@ -3,13 +3,15 @@ server:
 spring:
   application:
     name: API调度系统
+  profiles:
+    active: dev
   cache:
     cache-names:
       - api
     type: simple
   r2dbc:
     url: r2dbc:mysql://${mysql_host}:3306/api_scheduler?useUnicode=true&characterEncoding=utf8&useSSL=false&allowPublicKeyRetrieval=true&allowMultiQueries=true
-    username: ${mysql_username}
+    username: root
     password: ${mysql_password}
     pool:
       validation-depth: remote
@@ -23,10 +25,5 @@ spring:
       default-subject: 您有新的通知了！
 logging:
   pattern:
-    dateformat: HH:mm:ss
-  level:
-    com.yunxiao.service: debug
-    io.asyncer.r2dbc.mysql.QUERY: debug
-    sql: debug
-    org.springframework.web.HttpLogging: debug
+    dateformat: MM-dd HH:mm:ss zzzZZZ
 

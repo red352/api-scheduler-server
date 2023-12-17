@@ -3,7 +3,7 @@ package com.yunxiao.service.data.support.cron;
 import cn.hutool.cron.pattern.CronPatternBuilder;
 import cn.hutool.cron.pattern.Part;
 import com.yunxiao.service.data.support.ErrorCode;
-import com.yunxiao.spring.reactive.model.result.BusinessException;
+import com.yunxiao.spring.core.protocol.BusinessException;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import lombok.extern.slf4j.Slf4j;

@@ -1,8 +1,8 @@
 package com.yunxiao.service.config;
 
 import com.yunxiao.service.data.support.ErrorCode;
-import com.yunxiao.spring.reactive.model.result.BusinessException;
-import com.yunxiao.spring.reactive.model.result.Result;
+import com.yunxiao.spring.core.protocol.BusinessException;
+import com.yunxiao.spring.core.protocol.Result;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.codec.DecodingException;
@@ -24,7 +24,7 @@ public class ErrorConfig {
         if (log.isDebugEnabled()) {
             log.error("请求解码失败", e);
         }
-        return Result.ofNull().codeEnum(ErrorCode.REQUEST_PARAM_ERROR).toMono();
+        return Mono.just(Result.ofNull().codeAble(ErrorCode.REQUEST_PARAM_ERROR).build());
     }
 
     @ExceptionHandler(BusinessException.class)
@@ -32,6 +32,6 @@ public class ErrorConfig {
         if (log.isDebugEnabled()) {
             log.error("业务异常", e);
         }
-        return Result.ofNull().code(e.getCode()).msg(e.getMsg()).tips(e.getTips()).toMono();
+        return Mono.just(Result.ofNull().code(e.getCode()).msg(e.getMsg()).tips(e.getTips()).build());
     }
 }

@@ -6,8 +6,8 @@ import com.yunxiao.service.data.model.query.QueryApi;
 import com.yunxiao.service.data.repository.ApiRepository;
 import com.yunxiao.service.data.validation.group.SaveGroup;
 import com.yunxiao.service.data.validation.group.UpdateGroup;
-import com.yunxiao.spring.reactive.model.result.RequestPage;
-import com.yunxiao.spring.reactive.model.result.Result;
+import com.yunxiao.spring.core.protocol.RequestPage;
+import com.yunxiao.spring.core.protocol.Result;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -102,7 +102,7 @@ public class ApiController {
             map.put(SqlIdentifier.quoted("headers"), api.getHeaders());
         }
         if (map.isEmpty()) {
-            return Result.ofNull().toMono();
+            return Mono.just(Result.ofNull().build());
         }
         return r2dbcEntityTemplate.update(
                 Query.query(Criteria.where("id").is(api.getId())),

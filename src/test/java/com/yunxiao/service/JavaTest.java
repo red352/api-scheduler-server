@@ -3,6 +3,7 @@ package com.yunxiao.service;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 
+import java.util.UUID;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -18,7 +19,7 @@ public class JavaTest {
 
     @Test
     void test5() {
-
+        System.out.println(UUID.randomUUID().toString().replaceAll("-", ""));
 
     }
 

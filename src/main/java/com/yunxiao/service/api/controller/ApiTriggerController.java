@@ -6,7 +6,7 @@ import com.yunxiao.service.data.model.vo.ApiTriggerVo;
 import com.yunxiao.service.data.repository.ApiRepository;
 import com.yunxiao.service.data.repository.ApiTriggerRepository;
 import com.yunxiao.service.scheduler.ApiScheduler;
-import com.yunxiao.spring.reactive.model.result.Result;
+import com.yunxiao.spring.core.protocol.Result;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;

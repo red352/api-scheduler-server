@@ -1,0 +1,7 @@
+spring:
+  r2dbc:
+    url: r2dbc:mysql://${mysql_host}:3306/api_scheduler?useUnicode=true&characterEncoding=utf8&useSSL=false&allowPublicKeyRetrieval=true&allowMultiQueries=true
+    password: ${mysql_password}
+  mail:
+    password: ${qqmail_key}
+

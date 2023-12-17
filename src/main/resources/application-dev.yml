@@ -1,0 +1,12 @@
+spring:
+  r2dbc:
+    url: r2dbc:mysql://127.0.0.1:3306/api_scheduler?useUnicode=true&characterEncoding=utf8&useSSL=false&allowPublicKeyRetrieval=true&allowMultiQueries=true
+    password: 123456
+  mail:
+    password: ${qqmail_key}
+logging:
+  level:
+    com.yunxiao.service: debug
+    io.asyncer.r2dbc.mysql.QUERY: debug
+    sql: debug
+    org.springframework.web.HttpLogging: debug
